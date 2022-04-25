@@ -1,13 +1,12 @@
 $ErrorActionPreference = 'Stop'
 
 $SONAR_SERVER_URL = "https://sonarcloud.io"
-#$SONAR_TOKEN = # access token from SonarCloud projet creation page -Dsonar.login=XXXX: set in the environment from the CI
+#$SONAR_TOKEN = # Access token coming from SonarCloud projet creation page. In this example, it is defined in the environement through a Github secret.
 $SONAR_SCANNER_VERSION = "4.6.1.2450" # Find the latest version in the "Windows" link on this page:
-                                      # https://sonarcloud.io/documentation/analysis/scan/sonarscanner/
+                                      # https://docs.sonarcloud.io/advanced-setup/ci-based-analysis/sonarscanner-cli/
 $BUILD_WRAPPER_OUT_DIR = "build_wrapper_output_directory" # Directory where build-wrapper output will be placed
 
 mkdir $HOME/.sonar
-$SONAR_SCANNER_HOME = "$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-windows"
 
 # Download build-wrapper
 $path = "$HOME/.sonar/build-wrapper-win-x86.zip"
@@ -27,7 +26,7 @@ rm $path -Force -ErrorAction SilentlyContinue
 (New-Object System.Net.WebClient).DownloadFile("https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-windows.zip", $path)
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 [System.IO.Compression.ZipFile]::ExtractToDirectory($path, "$HOME/.sonar")
-$env:Path += ";$SONAR_SCANNER_HOME\bin"
+$env:Path += ";$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-windows\bin"
 
 # Setup the build system
 rm build -Recurse -Force -ErrorAction SilentlyContinue
