@@ -31,9 +31,7 @@ $env:Path += ";$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-windows\bin"
 # Setup the build system
 rm build -Recurse -Force -ErrorAction SilentlyContinue
 mkdir build
-cd build
-cmake ..
-cd ..
+cmake -B build
 
 # Build inside the build-wrapper
 build-wrapper-win-x86-64 --out-dir $BUILD_WRAPPER_OUT_DIR cmake --build build/ --config Release
