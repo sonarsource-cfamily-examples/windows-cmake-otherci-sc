@@ -1,5 +1,9 @@
 $ErrorActionPreference = 'Stop'
 
+# SonarCloud needs a full clone to work correctly but some CIs perform shallow clones
+# so we first need to make sure that the source repository is complete
+git fetch --unshallow
+
 $SONAR_SERVER_URL = "https://sonarcloud.io"
 #$SONAR_TOKEN = # Access token coming from SonarCloud projet creation page. In this example, it is defined in the environement through a Github secret.
 $SONAR_SCANNER_VERSION = "4.6.1.2450" # Find the latest version in the "Windows" link on this page:
@@ -10,8 +14,6 @@ mkdir $HOME/.sonar
 
 # Download build-wrapper
 $path = "$HOME/.sonar/build-wrapper-win-x86.zip"
-rm build-wrapper-win-x86 -Recurse -Force -ErrorAction SilentlyContinue
-rm $path -Force -ErrorAction SilentlyContinue
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 (New-Object System.Net.WebClient).DownloadFile("$SONAR_SERVER_URL/static/cpp/build-wrapper-win-x86.zip", $path)
 Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -20,16 +22,11 @@ $env:Path += ";$HOME/.sonar/build-wrapper-win-x86"
 
 # Download sonar-scanner
 $path = "$HOME/.sonar/sonar-scanner-cli-$SONAR_SCANNER_VERSION-windows.zip"
-rm sonar-scanner -Recurse -Force -ErrorAction SilentlyContinue
-rm $path -Force -ErrorAction SilentlyContinue
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 (New-Object System.Net.WebClient).DownloadFile("https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-windows.zip", $path)
-Add-Type -AssemblyName System.IO.Compression.FileSystem
 [System.IO.Compression.ZipFile]::ExtractToDirectory($path, "$HOME/.sonar")
-$env:Path += ";$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-windows\bin"
+$env:Path += ";$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-windows/bin"
 
 # Setup the build system
-rm build -Recurse -Force -ErrorAction SilentlyContinue
 mkdir build
 cmake -B build
 
