@@ -12,11 +12,13 @@ $BUILD_WRAPPER_OUT_DIR = "build_wrapper_output_directory" # Directory where buil
 
 mkdir $HOME/.sonar
 
+# Prepare downloading and extraction of build-wrapper and sonar-scanner
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+
 # Download build-wrapper
 $path = "$HOME/.sonar/build-wrapper-win-x86.zip"
-[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 (New-Object System.Net.WebClient).DownloadFile("$SONAR_SERVER_URL/static/cpp/build-wrapper-win-x86.zip", $path)
-Add-Type -AssemblyName System.IO.Compression.FileSystem
 [System.IO.Compression.ZipFile]::ExtractToDirectory($path, "$HOME/.sonar")
 $env:Path += ";$HOME/.sonar/build-wrapper-win-x86"
 
