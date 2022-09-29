@@ -13,7 +13,7 @@ jobs:
       - name: Build and analyze on SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # Put the name of your token here
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }} # Put the name of your token here
         run: .\build-analyze.ps1
         shell: pwsh
         
