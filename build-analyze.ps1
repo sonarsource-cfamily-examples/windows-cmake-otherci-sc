@@ -36,4 +36,4 @@ cmake -B build
 build-wrapper-win-x86-64 --out-dir $BUILD_WRAPPER_OUT_DIR cmake --build build/ --config Release
 
 # Run sonar scanner
-sonar-scanner.bat --define sonar.host.url=$SONAR_SERVER_URL --define sonar.login=$SONAR_TOKEN --define sonar.cfamily.build-wrapper-output=$BUILD_WRAPPER_OUT_DIR
+sonar-scanner.bat --define sonar.host.url=$SONAR_SERVER_URL --define sonar.login=$SONAR_TOKEN --define sonar.cfamily.compile-commands=$BUILD_WRAPPER_OUT_DIR/compile_commands.json
