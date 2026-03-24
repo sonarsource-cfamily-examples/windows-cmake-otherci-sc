@@ -6,7 +6,7 @@ git fetch --unshallow
 
 $SONAR_SERVER_URL = "https://sonarcloud.io"
 #$SONAR_TOKEN = # Access token coming from SonarCloud projet creation page. In this example, it is defined in the environement through a Github secret.
-$SONAR_SCANNER_VERSION = "5.0.1.3006" # Find the latest version in the "Windows" link on this page:
+$SONAR_SCANNER_VERSION = "8.0.1.6346" # Find the latest version in the "Windows" link on this page:
                                       # https://docs.sonarcloud.io/advanced-setup/ci-based-analysis/sonarscanner-cli/
 $BUILD_WRAPPER_OUT_DIR = "build_wrapper_output_directory" # Directory where build-wrapper output will be placed
 
@@ -23,10 +23,10 @@ $path = "$HOME/.sonar/build-wrapper-win-x86.zip"
 $env:Path += ";$HOME/.sonar/build-wrapper-win-x86"
 
 # Download sonar-scanner
-$path = "$HOME/.sonar/sonar-scanner-cli-$SONAR_SCANNER_VERSION-windows.zip"
-(New-Object System.Net.WebClient).DownloadFile("https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-windows.zip", $path)
+$path = "$HOME/.sonar/sonar-scanner-cli-$SONAR_SCANNER_VERSION-windows-x64.zip"
+(New-Object System.Net.WebClient).DownloadFile("https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SONAR_SCANNER_VERSION-windows-x64.zip", $path)
 [System.IO.Compression.ZipFile]::ExtractToDirectory($path, "$HOME/.sonar")
-$env:Path += ";$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-windows/bin"
+$env:Path += ";$HOME/.sonar/sonar-scanner-$SONAR_SCANNER_VERSION-windows-x64/bin"
 
 # Setup the build system
 mkdir build
